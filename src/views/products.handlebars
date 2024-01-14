@@ -1,0 +1,30 @@
+<h2>Bienvenido {{user.first_name}}</h2>
+<h4>Tu email es: {{user.email}} </h4>
+<h4>Tu carrito es: {{user.cartID}} </h4>
+
+<button><a href="/api/views/cart/{{user.cartID}}">Mi Carrito</a></button>
+
+<h2>LISTA DE PRODUCTOS</h2>
+<div id="productsView">
+  <h4>Página: {{products.Page}} de {{products.totalPages}}</h4>
+  {{#if products.payload.length }}
+      {{#each products.payload}}
+          <div>
+              <h3>Producto:{{title}} - stock:{{stock}} - code:{{code}} - id:{{_id}}</h3>
+              <button onclick="location.href='/api/views/detailProduct/{{_id}}'">Detalle producto</button>
+          </div>
+      {{/each}}
+  {{else}}
+      <p>No products Available</p>
+  {{/if}}
+
+  {{#if products.hasPrevPage }}
+    <a href="{{products.next}}">Página previa</a>
+  {{/if}}
+
+  {{#if products.hasNextPage }}
+    <a href="{{products.prev}}">Página siguiente</a>
+  {{/if}} 
+</div>
+
+<button><a href="/api/sessions/logout">Cerrar sesión</a></button>

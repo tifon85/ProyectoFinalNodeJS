@@ -1,0 +1,20 @@
+<h2>Bienvenido {{user.first_name}}</h2>
+<h4>Tu email es: {{user.email}} </h4>
+<h4>Tu carrito es: {{user.cartID}} </h4>
+
+<h2>Detalle Producto</h2>
+
+<h3>Producto:{{product.title}} - stock:{{product.stock}} - code:{{product.code}} - id:{{product._id}}</h3>
+<form id="productForm">
+    <input type="hidden" id="ProductID" value="{{product._id}}">
+    <input type="hidden" id="CartID" value="{{user.cartID}}">
+    <!--<input type="number" min="1" max="{{product.stock}}" value="1" name="quantity">-->
+    <input type="submit" value="Agregar al Carrito">
+</form>
+
+<button><a href="/api/views/cart/{{user.cartID}}">Mi Carrito</a></button>
+
+<button><a href="http://localhost:8080/api/sessions/logout">SIGN OUT</a></button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/detailProduct.js"></script>

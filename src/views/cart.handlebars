@@ -1,0 +1,15 @@
+
+<h2>Bienvenido {{user.first_name}}</h2>
+<h4>Tu email es: {{user.email}} </h4>
+<h4>Tu carrito es: {{user.cartID}} </h4>
+
+<h2>LISTA DE PRODUCTOS</h2>
+{{#if products.length }}
+    {{#each products}}
+        <h3>Producto:{{product.title}} - cantidad:{{quantity}} - precio:{{product.price}}</h3>
+    {{/each}}
+{{else}}
+    <p>No products Available</p>
+{{/if}}
+
+<button><a href="http://localhost:8080/api/sessions/logout">SIGN OUT</a></button>
