@@ -180,7 +180,12 @@ passport.use(
 
 //funcion que retorna el token --> se utiliza en JWTStrategy
 const fromCookies = (req) => {
-  return req.headers.cookie.replace('token=', '');
+  if(req.headers.cookie){
+    return req.headers.cookie.replace('token=', '');
+  }else{
+    return null
+  }
+  
 };
 
 // JWT --> para recuperar la info del usuario

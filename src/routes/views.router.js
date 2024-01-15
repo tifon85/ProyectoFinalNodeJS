@@ -43,11 +43,8 @@ router.get("/profile", (req, res) => {
   });
 
 router.get('/products',
-                passport.authenticate("jwt", { session: false }),
+                passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/login", session: false }),
                 async (req,res) => {
-    if (!req.user) {
-        return res.redirect("http://localhost:8080/api/views/login");
-    }
 
     try{
         let products = await prodManager.getProducts({})
@@ -59,7 +56,7 @@ router.get('/products',
 })
 
 router.get('/detailProduct/:pid',
-                passport.authenticate("jwt", { session: false }),
+                passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/login", session: false }),
                 async (req,res) => {
     if (!req.user) {
         return res.redirect("http://localhost:8080/api/views/login");
@@ -80,7 +77,7 @@ router.get('/detailProduct/:pid',
 
 //funcion para mostrar los productos de un carrito
 router.get('/cart/:cid',
-                passport.authenticate("jwt", { session: false }),
+                passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/login", session: false }),
                 async (req,res) => {
     if (!req.user) {
         return res.redirect("http://localhost:8080/api/views/login")
