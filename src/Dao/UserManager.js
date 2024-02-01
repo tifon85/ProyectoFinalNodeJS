@@ -1,4 +1,4 @@
-import { UsersModel } from "../../db/models/users.model.js"
+import { UsersModel } from "../db/models/users.model.js"
 
 export class UserManager{
 
@@ -30,6 +30,11 @@ export class UserManager{
         }catch(error){
             throw new Error(error.message)
         }
+    }
+
+    //Actualizar carrito
+    updateUser = async (idUser, user) => {
+        return cart.updateOne({ _id: idCart }, cart);
     }
 
 }

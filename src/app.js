@@ -7,17 +7,21 @@ import sessionsRouter from './routes/sessions.router.js'
 import { __dirname } from './utils.js'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
-import { ProductManager } from './Dao/managers/ProductManagerMongo.js'
-import { MessageManager } from './Dao/managers/MessageManagerMongo.js'
-import { CartManager } from './Dao/managers/CartManagerMongo.js'
+import { ProductService } from './services/ProductService.js'
+import { MessageService } from './services/MessageService.js'
+import { CartService } from './services/CartService.js'
 import { URI } from "./db/configDB.js"
 import cookieParser from "cookie-parser";
-import "./config/passport.config.js";
+import "./middleware/passport.config.js";
 import { port } from "./config/dotenv.config.js"
+import cors from "cors"
 //import passport from "passport";
 
 const app = express()
 //const port = 8080
+
+//Cors para configurar los origenes desde los que aceptamos los request
+app.use(cors())
 
 app.use(cookieParser())
 
@@ -47,30 +51,30 @@ const httpServer = app.listen(port,(error)=>{
 
 const socketServer = new Server(httpServer)
 
-const prodManager = new ProductManager()
-const messageManager = new MessageManager()
-const cartManager = new CartManager()
+const productService = new ProductService()
+const messageService = new MessageService()
+const cartService = new CartService()
 
 //socket productos
 socketServer.on("connection", async (socket) => {
 
-    const products = await prodManager.getProducts({})
-    const messages = await messageManager.getMessage()
+    const products = await productService.getProductsService({})
+    const messages = await messageService.getMessagesService()
 
     //socket productos
     socketServer.emit("products", products);
     socketServer.emit("chat", messages);
 
-    /*socket.on("CreateProduct", async (value) => {
-        await prodManager.addProducts(value)
-        const products = await prodManager.getProducts({})
+    socket.on("CreateProduct", async (value) => {
+        await productService.addProductService(value)
+        const products = await productService.getProductsService({})
         socketServer.emit("products", products);
     });
     socket.on("deleteId", async (value) => {
-        await prodManager.deleteProduct(value)
-        const products = await prodManager.getProducts({})
+        await productService.deleteProductService(value)
+        const products = await productService.getProductsService({})
         socketServer.emit("products", products);
-    });*/
+    });
 
     //socket chat
     socket.on("newUser", (user) => {
@@ -78,13 +82,14 @@ socketServer.on("connection", async (socket) => {
         socket.emit("connected");
     });
     socket.on("message", async (infoMessage) => {
-        await messageManager.createMessage(infoMessage)
-        const messages = await messageManager.getMessage()
+        await messageService.createMessageService(infoMessage)
+        const messages = await messageService.getMessagesService()
         socketServer.emit("chat", messages);
     });
 
     socket.on("addProduct", async (infoProduct) => {
-        await cartManager.addProductToCart(infoProduct.cartID, infoProduct.productID)
+        const cart = await cartService.getCartByIDService(infoProduct.cartID)
+        await cartService.addProductToCartService(cart, infoProduct.productID)
     });
 
   });

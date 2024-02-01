@@ -1,17 +1,14 @@
 import { Router } from "express";
-import { MessageManager } from '../Dao/managers/MessageManagerMongo.js'
+import { MessageController } from '../controllers/MessageController.js'
+
+const messageController = new MessageController()
 
 const router = Router();
 
-const messageManager = new MessageManager()
+//crear mensajes
+router.post('/', messageController.createMessage)
 
-router.post('/', async (req,res) => {
-    const message = req.body
-    try{
-        await messageManager.createMessage(message)
-    }catch(error){
-        res.status(500).json({ message: error.message })
-    }
-})
+//obtener mensajes
+router.get('/', messageController.getMessages)
 
 export default router;

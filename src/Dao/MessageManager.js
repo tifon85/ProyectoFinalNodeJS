@@ -1,4 +1,4 @@
-import { messagesModel } from "../../db/models/messages.model.js";
+import { messagesModel } from "../db/models/messages.model.js";
 
 export class MessageManager{
 
@@ -11,7 +11,7 @@ export class MessageManager{
         }
     }
 
-    getMessage = async () => {
+    getMessages = async () => {
         try{
             const messages = await messagesModel.find()
             return messages

@@ -1,9 +1,9 @@
-import { productsModel } from "../../db/models/products.model.js";
+import { productsModel } from "../db/models/products.model.js";
 
 export class ProductManager {
 
     //función para agregar un producto a los ya existentes
-    addProducts = async (product) => {
+    addProduct = async (product) => {
         try {
             await productsModel.create(product)
         }catch(error){
@@ -11,6 +11,7 @@ export class ProductManager {
         }
     }
 
+    //obtener productos
     getProducts = async (query) => {
 
         try{

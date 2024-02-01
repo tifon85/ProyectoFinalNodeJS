@@ -3,13 +3,16 @@
 <h4>Tu email es: {{user.email}} </h4>
 <h4>Tu carrito es: {{user.cartID}} </h4>
 
-<h2>LISTA DE PRODUCTOS</h2>
-{{#if products.length }}
-    {{#each products}}
-        <h3>Producto:{{product.title}} - cantidad:{{quantity}} - precio:{{product.price}}</h3>
-    {{/each}}
-{{else}}
-    <p>No products Available</p>
-{{/if}}
+<form action="/api/carts/{{user.cartID}}/purchase" method="post">
+    <h2>LISTA DE PRODUCTOS</h2>
+    {{#if products.length }}
+        {{#each products}}
+            <h3>Producto:{{product.title}} - cantidad:{{quantity}} - precio:{{product.price}}</h3>
+        {{/each}}
+    {{else}}
+        <p>No products Available</p>
+    {{/if}}
+    <input type="submit" value="Finalizar compra">
+</form>
 
 <button><a href="http://localhost:8080/api/sessions/logout">SIGN OUT</a></button>

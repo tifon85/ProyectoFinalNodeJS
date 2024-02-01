@@ -1,15 +1,14 @@
 import passport from "passport";
-import { UserManager } from '../Dao/managers/UsersManagerMongo.js'
-import { CartManager } from '../Dao/managers/CartManagerMongo.js'
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GithubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
-import { hashData, compareData } from "../utils.js";
-import { google_client_id, google_client_secret, github_client_id, github_client_secret, secret_jwt  } from "./dotenv.config.js"
+import { google_client_id, google_client_secret, github_client_id, github_client_secret, secret_jwt  } from "../config/dotenv.config.js"
+import { UserService } from "../services/UserService.js";
+import { CartService } from "../services/CartService.js";
 
-const userManager = new UserManager()
-const cartManager = new CartManager()
+const cartService = new CartService()
+const userService = new UserService()
 
 passport.use(
     "register",
@@ -21,17 +20,23 @@ passport.use(
           return done(null, false, { message: "All fields are required" });
         }
         try {
-            const user = await userManager.getUserByEmail(email)
+            const user = await userService.getUserByEmailService(email)
             if(!user){
                 //no existe el usuario, entonces lo registramos
-                const cartID = await cartManager.createCart()
-                const hashedPassword = await hashData(password);
-                const createdUser = await userManager.createUser({
-                ...req.body,
-                password: hashedPassword,
-                role: "PREMIUM",
-                cart: cartID,
-                });
+                const cartID = await cartService.createCartService()
+                const role =
+                        email === "adminCoder@coder.com" && password === "adminCod3r123"
+                        ? "ADMIN"
+                        : "USUARIO"
+                const user = {
+                  first_name: first_name,
+                  last_name: last_name,
+                  email: email,
+                  password: password,
+                  role: role,
+                  cart: cartID,
+                }
+                const createdUser = await userService.registerUserService(user)
                 return done(null, createdUser, { message: "User created"});
             }else{
                 //ya existe el usuario
@@ -54,13 +59,13 @@ passport.use(
             return done(null, false, { message: "All fields are required" });
         }
         try {
-          const user = await userManager.getUserByEmail(email);
+          const user = await userService.getUserByEmailService(email);
           if (!user) {
             //no existe el usuario
             return done(null, false, { message: "Incorrect email or password." });
           }
-          const isPasswordValid = await compareData(password, user.password);
-          if (!isPasswordValid) {
+          const PasswordValid = await userService.isPasswordValidService(password, user.password);
+          if (!PasswordValid) {
             //no es correcta la password
             return done(null, false, { message: "Incorrect email or password." });
           }else{
@@ -86,7 +91,7 @@ passport.use(
         try {
           //Si el email es publico, lo registro con el email
           if(profile._json.email){
-            const userDB = await userManager.getUserByEmail(profile._json.email);
+            const userDB = await userService.getUserByEmailService(profile._json.email);
             // login
             if (userDB) {
               if (userDB.isGithub) {
@@ -95,21 +100,23 @@ passport.use(
                 return done(null, false);
               }
             }
+            //no existe el usuario, entonces lo registramos
             // signup
-            const cartID = await cartManager.createCart()
-            const infoUser = {
-              first_name: profile._json.name.split(" ")[0] || "Usuario Github", // ['farid','sesin']
+            const cartID = await cartService.createCartService()
+            const user = {
+              first_name: profile._json.name.split(" ")[0] || "Usuario Github",// ['farid','sesin']
               last_name: profile._json.name.split(" ")[1] || profile.username,
               email: profile._json.email,
               password: " ",
-              isGithub: true,
+              role: "USUARIO",
               cart: cartID,
-            };
-            const createdUser = await userManager.createUser(infoUser);
+              isGithub: true
+            }
+            const createdUser = await userService.registerUserService(user)
             return done(null, createdUser);
           }else{
             //si el email es privado, lo registro con el ID de github en lugar del email
-            const userDB = await userManager.getUserByEmail(profile.id);
+            const userDB = await userService.getUserByEmailService(profile.id);
             // login
             if (userDB) {
               if (userDB.isGithub) {
@@ -119,16 +126,17 @@ passport.use(
               }
             }
             // signup
-            const cartID = await cartManager.createCart()
-            const infoUser = {
+            const cartID = await cartService.createCartService()
+            const user = {
               first_name: "Usuario Github",
               last_name: profile.username,
               email: profile.id,
               password: " ",
-              isGithub: true,
+              role: "USUARIO",
               cart: cartID,
-            };
-            const createdUser = await userManager.createUser(infoUser);
+              isGithub: true
+            }
+            const createdUser = await userService.registerUserService(user)
             return done(null, createdUser);
           }
         } catch (error) {
@@ -150,7 +158,7 @@ passport.use(
     },
     async function (accessToken, refreshToken, profile, done) {
       try {
-        const userDB = await userManager.getUserByEmail(profile._json.email);
+        const userDB = await userService.getUserByEmailService(profile._json.email);
         // login
         if (userDB) {
           if (userDB.isGoogle) {
@@ -160,17 +168,18 @@ passport.use(
           }
         }
         // signup
-        const cartID = await cartManager.createCart()
-        const infoUser = {
-          first_name: profile._json.given_name,
-          last_name: profile._json.family_name,
-          email: profile._json.email,
-          password: " ",
-          isGoogle: true,
-          cart: cartID,
-        };
-        const createdUser = await userManager.createUser(infoUser);
-        done(null, createdUser);
+        const cartID = await cartService.createCartService()
+            const user = {
+              first_name: profile._json.given_name,
+              last_name: profile._json.family_name,
+              email: profile._json.email,
+              password: " ",
+              role: "USUARIO",
+              cart: cartID,
+              isGoogle: true
+            }
+        const createdUser = await userService.registerUserService(user)
+        return done(null, createdUser);
       } catch (error) {
         done(error);
       }
@@ -214,7 +223,7 @@ passport.use(
   
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await userManager.getUserById(id);
+      const user = await userService.getUserByIdService(id);
       return done(null, user);
     } catch (error) {
       done(error);
