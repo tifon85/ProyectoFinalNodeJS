@@ -16,6 +16,7 @@ import "./middleware/passport.config.js";
 import { port } from "./config/dotenv.config.js"
 import cors from "cors"
 import errorHandler from "./middleware/errors";
+import { addLogger } from './src/utils/logger.js';
 
 const app = express()
 //const port = 8080
@@ -29,6 +30,7 @@ app.use(cookieParser())
 /*app.use(passport.initialize());*/
 
 app.use(errorHandler)
+app.use(addLogger);
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
