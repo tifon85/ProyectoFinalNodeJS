@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-export default class ticketDTO{
+export class ticketDTO{
 
     constructor(ticket){
         this.code=uuidv4(),

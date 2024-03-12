@@ -1,4 +1,4 @@
-export default class productDTO{
+export class productDTO{
     constructor(product){
         this.title=product.title,
         this.description=product.description,

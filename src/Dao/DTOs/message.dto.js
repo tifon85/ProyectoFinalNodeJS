@@ -1,4 +1,4 @@
-export default class cessageDTO{
+export class messageDTO{
 
     constructor(message){
         this.user=message.user,

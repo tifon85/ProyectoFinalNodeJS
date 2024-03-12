@@ -76,11 +76,6 @@ socketServer.on("connection", async (socket) => {
         socketServer.emit("products", products);
     });
 
-    //socket chat
-    socket.on("newUser", (user) => {
-        socket.broadcast.emit("userConnected", user);
-        socket.emit("connected");
-    });
     socket.on("message", async (infoMessage) => {
         await messageService.createMessageService(infoMessage)
         const messages = await messageService.getMessagesService()

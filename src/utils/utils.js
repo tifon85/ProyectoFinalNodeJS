@@ -3,7 +3,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { secret_jwt } from "./config/dotenv.config.js"
+import { secret_jwt } from "../config/dotenv.config.js"
 
 //hash para cifrar las password
 export const hashData = async (data) => {
