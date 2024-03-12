@@ -29,16 +29,35 @@ export class UserController {
         }
     }
 
-    //restaurar password
-    restaurarPassword = async (req, res) => {
-        const { email, password } = req.body;
-        try {
+    forgotPassword = async (req, res) => {
+        const { email } = req.body;
+        try{
             const user = await userService.getUserByEmailService(email)
             if (!user) {
                 //no existe el usuario
                 return res.redirect("http://localhost:8080/api/views/register");
             }
-            await userService.restaurarPasswordService(password, user)
+            await userService.forgotPassword(email)
+            res.status(200).json({ message: "Mail para reestablecer password enviado" });
+        } catch (error) {
+            res.status(500).json({ error });
+        }
+    }
+
+    //restaurar password
+    restaurarPassword = async (req, res) => {
+        const { password1, password2 } = req.body;
+        const email = req.email
+        try {
+            if(password1 != password2){
+                res.status(400).json({ message: "No coinciden las passwords" });
+            }
+            const user = await userService.getUserByEmailService(email)
+            if (!user) {
+                //no existe el usuario
+                return res.redirect("http://localhost:8080/api/views/register");
+            }
+            await userService.restaurarPasswordService(password1, user)
             res.status(200).json({ message: "Password updated" });
         } catch (error) {
             res.status(500).json({ error });

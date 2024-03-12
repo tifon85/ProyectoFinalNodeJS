@@ -51,6 +51,8 @@ sessionRouter.get("/auth/google/callback",
 
 sessionRouter.get("/logout", userController.logoutUser);
 
+sessionRouter.post("/forgotPassword", userController.forgotPassword);
+
 sessionRouter.post("/restaurar", userController.restaurarPassword);
 
 sessionRouter.get("/current", userController.currentSession);
