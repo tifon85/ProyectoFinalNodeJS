@@ -1,4 +1,7 @@
 import { ProductService } from "../services/ProductService.js";
+import CustomError from "../services/errors/CustomError";
+import generateUserErrorInfo from "../services/errors/info";
+import EErrors from "../services/errors/enums";
 
 const productService = new ProductService()
 
@@ -7,12 +10,18 @@ export class ProductController {
     //crear producto
     CreateProduct = async (req, res) => {
         const product = req.body
+        const {title, description, price, category, code, stock} = req.body
         try{
             //VALIDACIONES
-            if(!product.title || !product.description || !product.price || !product.category || !product.code || !product.stock){
-                res.status(404).json({ message: "Todos los campos son obligatorios" })
+            if(!title || !description || !price || !category || !code || !stock){
+                CustomError.createError({
+                    name: 'User Creation Error',
+                    cause: generateUserErrorInfo({ title, description, price, category, code, stock }),
+                    message: 'Error trying to create user',
+                    code: EErrors.INVALID_TYPES_ERROR
+                })
             }
-            const yaEsta = await productService.existProductCodeService(product.code)
+            const yaEsta = await productService.existProductCodeService(code)
             if(yaEsta.length == 0){
                 await productService.CreateProductService(product)
                 res.status(200).json({ message: "Producto agregado" })

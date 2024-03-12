@@ -15,7 +15,7 @@ import cookieParser from "cookie-parser";
 import "./middleware/passport.config.js";
 import { port } from "./config/dotenv.config.js"
 import cors from "cors"
-//import passport from "passport";
+import errorHandler from "./middleware/errors";
 
 const app = express()
 //const port = 8080
