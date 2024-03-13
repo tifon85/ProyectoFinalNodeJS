@@ -57,6 +57,4 @@ sessionRouter.post("/restaurar", userController.restaurarPassword);
 
 sessionRouter.get("/current", userController.currentSession);
 
-sessionRouter.get("/premium/:uid", userController.updateRoleUser);
-
 export default sessionRouter

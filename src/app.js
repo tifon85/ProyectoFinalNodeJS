@@ -4,6 +4,7 @@ import cartsRouter from './routes/carts.router.js'
 import messagesRouter from './routes/messages.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
+import usersRouter from './routes/users.router.js'
 import { __dirname } from './utils.js'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
@@ -47,6 +48,7 @@ app.use('/api/carts',cartsRouter)
 app.use('/api/messages',messagesRouter)
 app.use('/api/sessions',sessionsRouter)
 app.use('/api/views',viewsRouter)
+app.use('/api/users',usersRouter)
 
 const httpServer = app.listen(port,(error)=>{
     if(error) console.log(error)
