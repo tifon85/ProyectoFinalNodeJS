@@ -5,7 +5,7 @@ import messagesRouter from './routes/messages.router.js'
 import viewsRouter from './routes/views.router.js'
 import sessionsRouter from './routes/sessions.router.js'
 import usersRouter from './routes/users.router.js'
-import { __dirname } from './utils.js'
+import { __dirname } from './utils/utils.js'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
 import { ProductService } from './services/ProductService.js'
@@ -16,8 +16,8 @@ import cookieParser from "cookie-parser";
 import "./middleware/passport.config.js";
 import { port } from "./config/dotenv.config.js"
 import cors from "cors"
-import errorHandler from "./middleware/errors";
-import { addLogger } from './src/utils/logger.js';
+import errorHandler from "./middleware/errors.js";
+import { addLogger } from './utils/logger.js';
 
 const app = express()
 //const port = 8080

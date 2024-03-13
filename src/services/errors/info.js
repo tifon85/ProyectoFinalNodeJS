@@ -9,3 +9,5 @@ export const generateUserErrorInfo = (user) => {
       * stock: Debe ser tipo Number, se recibio: ${user.stock}
     `
   }
+
+export default generateUserErrorInfo

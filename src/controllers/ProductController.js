@@ -1,7 +1,7 @@
 import { ProductService } from "../services/ProductService.js";
-import CustomError from "../services/errors/CustomError";
-import generateUserErrorInfo from "../services/errors/info";
-import EErrors from "../services/errors/enums";
+import CustomError from "../services/errors/CustomError.js";
+import generateUserErrorInfo from "../services/errors/info.js";
+import EErrors from "../services/errors/enums.js";
 
 const productService = new ProductService()
 

@@ -1,10 +1,10 @@
 import nodemailer from "nodemailer";
-import config from "../config/dotenv.config.js";
+import { nodemailer_password, nodemailer_user } from "../config/dotenv.config.js";
 
 export const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: config.nodemailer_user,
-    pass: config.nodemailer_password,
+    user: nodemailer_user,
+    pass: nodemailer_password,
   },
 });

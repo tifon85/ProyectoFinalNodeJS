@@ -1,8 +1,7 @@
 import { UserManager } from "../Dao/UserManager.js";
 import { CartManager } from "../Dao/CartManager.js";
 import { userDTO } from "../Dao/DTOs/user.dto.js";
-import { hashData, compareData, generateTokenSession, generateTokenMailPassword } from "../utils.js";
-import { verificationLink } from "../config/dotenv.config.js"
+import { hashData, compareData, generateTokenSession, generateTokenMailPassword } from "../utils/utils.js";
 import { transporter } from "../utils/nodemailer.js";
 
 const userManager = new UserManager()

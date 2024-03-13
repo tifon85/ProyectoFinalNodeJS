@@ -1,6 +1,6 @@
-import EErrors from "../services/errors/enums";
+import EErrors from "../services/errors/enums.js";
 
-export const ErrorMiddleware = (error, req, res, next) => {
+const ErrorMiddleware = (error, req, res, next) => {
   console.log(error.cause)
 
   switch(error.code) {
@@ -12,3 +12,5 @@ export const ErrorMiddleware = (error, req, res, next) => {
 
   }
 }
+
+export default ErrorMiddleware

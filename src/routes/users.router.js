@@ -3,6 +3,8 @@ import { UserController } from "../controllers/UserController.js"
 
 const userController = new UserController()
 
-const sessionRouter = Router();
+const userRouter = Router();
 
-sessionRouter.get("/premium/:uid", userController.updateRoleUser);
+userRouter.put("/premium/:uid", userController.updateRoleUser);
+
+export default userRouter
