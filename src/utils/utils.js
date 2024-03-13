@@ -16,15 +16,9 @@ export const compareData = async (data, hashedData) => {
 };
 
 //generar token - jwt
-export const generateTokenSession = (user) => {
+export const generateToken = (user) => {
   const token = jwt.sign(user, secret_jwt, { expiresIn: "1h" });
-  console.log("tokenSession", token);
-  return token;
-};
-
-export const generateTokenMailPassword = (email) => {
-  const token = jwt.sign(email, secret_jwt, { expiresIn: "1h" });
-  console.log("tokenMailPassword", token);
+  console.log("token", token);
   return token;
 };
 

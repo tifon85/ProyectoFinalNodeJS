@@ -16,10 +16,8 @@ export class UserController {
     //login, callback github y google
     loginUser = async (req, res) => {
         try{
-            console.log(req.user)
             //jwt
             const token = await userService.loginUserService(req.user)
-            console.log(token)
             res
             .status(200)
             .cookie("token", token, { maxAge: 1000000, httpOnly: true });
@@ -81,6 +79,7 @@ export class UserController {
             const user = await userService.getUserByIdService(uid)
             if(user.role != "ADMIN"){
                 await userService.updateRole(user)
+                res.status(200).json({ message: "Role actualizado" });
             }
         } catch (error) {
             res.status(500).json({ error });

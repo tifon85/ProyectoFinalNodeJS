@@ -1,11 +1,10 @@
 import { UserManager } from "../Dao/UserManager.js";
 import { CartManager } from "../Dao/CartManager.js";
 import { userDTO } from "../Dao/DTOs/user.dto.js";
-import { hashData, compareData, generateTokenSession, generateTokenMailPassword } from "../utils/utils.js";
+import { hashData, compareData, generateToken } from "../utils/utils.js";
 import { transporter } from "../utils/nodemailer.js";
 
 const userManager = new UserManager()
-const cartManager = new CartManager()
 
 export class UserService{
 
@@ -53,7 +52,6 @@ export class UserService{
     forgotPassword = async (email) => {
         
         try{
-            const token = generateTokenMailPassword( {email} )
 
             //Envio de mail para recuperar password
             const mailOptions = {
@@ -68,6 +66,7 @@ export class UserService{
         }catch(error){
             throw new Error(error.message)
         }
+        
     }
 
     restaurarPasswordService = async (password, user) => {
@@ -80,7 +79,7 @@ export class UserService{
     loginUserService = async (user) => {
         const cartID = user.cart._id
         const { first_name, last_name, role, email } = user;
-        const token = generateTokenSession({ first_name, last_name, email, role, cartID });
+        const token = generateToken({ first_name, last_name, email, role, cartID });
         return token
     }
 

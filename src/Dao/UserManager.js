@@ -34,7 +34,7 @@ export class UserManager{
 
     //Actualizar carrito
     updateUser = async (idUser, user) => {
-        return cart.updateOne({ _id: idCart }, cart);
+        return UsersModel.updateOne({ _id: idUser }, user);
     }
 
 }
