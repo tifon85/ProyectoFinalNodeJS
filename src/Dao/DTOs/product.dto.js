@@ -7,6 +7,7 @@ export class productDTO{
         this.stock=product.stock,
         this.category=product.category,
         this.thumbnails=product.thumbnails,
-        this.status=true
+        this.status=true,
+        this.owner=product.owner
     }
 }

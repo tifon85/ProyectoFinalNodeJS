@@ -17,7 +17,7 @@ router.get('/:cid', cartController.getProductsByCart)
 //funcion para agregar producto al carrito
 router.post('/:cid/product/:pid',
                     passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/error", session: false }),
-                    authMiddleware(["USUARIO"]),
+                    authMiddleware(["USUARIO","PREMIUM"]),
                     cartController.addProductToCart)
 
 //funcion para eliminar un producto del carrito
@@ -35,7 +35,7 @@ router.delete('/:cid', cartController.deleteAllProductsToCart)
 //funcion para finalizar compra
 router.post('/:cid/purchase', 
                     passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/error", session: false }),
-                    authMiddleware(["USUARIO"]),
+                    authMiddleware(["USUARIO","PREMIUM"]),
                     cartController.purchase)
 
 

@@ -28,13 +28,14 @@ const usersSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["ADMIN", "USUARIO"],
+    enum: ["ADMIN", "USUARIO", "PREMIUM"],
     default: "USUARIO",
   },
   cart:{
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Carts"
-    },
+  },
+  
 });
 
 export const UsersModel = mongoose.model('Users', usersSchema)

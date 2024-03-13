@@ -87,5 +87,14 @@ export class UserService{
         return token
     }
 
+    updateRole = async (user) => {
+        if(user.role == "USUARIO"){
+            user.role = "PREMIUM"
+        }else{
+            user.role = "USUARIO"
+        }
+        const userdto = new userDTO(user)
+        return await userManager.updateUser(user._id, userdto);
+    }
 
 }

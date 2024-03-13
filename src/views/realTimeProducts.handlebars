@@ -7,6 +7,7 @@
     stock: <input type="number" name="stock" id="stock">
     category: <input type="text" name="category" id="category">
     thumbnails: <input type="text" name="thumbnails" id="thumbnails">
+    <input type="hidden" name="userEmail" id="userEmail" value={{user.email}}>
     <input type="submit" value="Alta Producto">
 </form>
 <br>
@@ -14,6 +15,7 @@
 <h2>Baja Producto</h2>
 <form id="formularioBajaProducto">
     Ingrese el ID de producto a eliminar: <input type="number" name="id" id="id">
+    <input type="hidden" name="userEmail" id="userEmail" value={{user.email}}>
     <input type="submit" value="Baja Producto">
 </form>
 

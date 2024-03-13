@@ -40,7 +40,7 @@ router.get('/cart/:cid',
 //funcion para mostrar productos en tiempo real
 router.get('/realtimeproducts',
                 passport.authenticate("jwt", { failureRedirect: "http://localhost:8080/api/views/login", session: false }),
-                authMiddleware(["ADMIN"]),
+                authMiddleware(["ADMIN","PREMIUM"]),
                 viewController.viewRealtimeproducts)
 
 //funcion para mostrar chat en tiempo real

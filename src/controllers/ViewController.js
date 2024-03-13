@@ -92,7 +92,7 @@ export class ViewController {
     }
 
     viewRealtimeproducts = async (req, res) => {
-        res.render("realTimeProducts")
+        res.render("realTimeProducts", { user: req.user })
     }
 
 }

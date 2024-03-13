@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import {UserController } from "../controllers/UserController.js"
+import { UserController } from "../controllers/UserController.js"
 
 const userController = new UserController()
 
@@ -56,5 +56,7 @@ sessionRouter.post("/forgotPassword", userController.forgotPassword);
 sessionRouter.post("/restaurar", userController.restaurarPassword);
 
 sessionRouter.get("/current", userController.currentSession);
+
+sessionRouter.get("/premium/:uid", userController.updateRoleUser);
 
 export default sessionRouter

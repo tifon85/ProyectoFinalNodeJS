@@ -70,7 +70,7 @@ socketServer.on("connection", async (socket) => {
     socketServer.emit("chat", messages);
 
     socket.on("CreateProduct", async (value) => {
-        await productService.addProductService(value)
+        await productService.CreateProductService(value)
         const products = await productService.getProductsService({})
         socketServer.emit("products", products);
     });

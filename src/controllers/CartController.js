@@ -31,6 +31,7 @@ export class CartController {
     addProductToCart = async (req, res) => {
         const cid = req.params.cid
         const pid = req.params.pid
+        const user = req.user
         try{
             const cart = await cartService.getCartByIDService(cid)
             const prod = await productService.getProductByIDService(pid)
@@ -40,8 +41,12 @@ export class CartController {
                 if(!cart){
                     res.status(404).json({ message: "No existe el carrido con el id indicado" });
                 }else{
-                    await cartService.addProductToCartService(cart,pid)
+                    if(user.role == "USUARIO" || (user.role == "PREMIUM" && user.email == prod.owner)){
+                        await cartService.addProductToCartService(cart,pid)
                     res.status(200).render("detailProduct", { product: prod, user: req.user, message: "Producto agregado al carrito" })//json({ message: "Agregado el producto al carrito" });
+                    }else{
+                        res.status(404).json({ message: "El usuario es premium y no es owner del producto" });
+                    }
                 }
             }
         }catch(error){

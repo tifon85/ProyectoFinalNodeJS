@@ -73,4 +73,15 @@ export class UserController {
         res.redirect("http://localhost:8080/api/views/login");
     }
 
+    updateRoleUser = async (req, res) => {
+        const user = req.user
+        try {
+            if(user.role != "ADMIN"){
+                await userService.updateRole(user)
+            }
+        } catch (error) {
+            res.status(500).json({ error });
+        }
+    }
+
 }

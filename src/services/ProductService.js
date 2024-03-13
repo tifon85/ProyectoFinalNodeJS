@@ -1,15 +1,20 @@
 import { ProductManager } from "../Dao/ProductManager.js";
+import { UserService } from "../services/UserService.js";
 import { productDTO } from "../Dao/DTOs/product.dto.js";
 
 const prodManager = new ProductManager()
+const userService = new UserService()
 
 export class ProductService {
 
     //agregar un producto a los ya existentes
     CreateProductService = async (product) => {
         try {
-            const productdto = new productDTO(product)
-            await prodManager.addProduct(productdto)
+            const user = await userService.getUserByEmailService(product.owner)
+            if(user.role != "USUARIO"){
+                const productdto = new productDTO(product)
+                await prodManager.addProduct(productdto)
+            }
         }catch(error){
             throw new Error(error.message)
         }
@@ -48,14 +53,17 @@ export class ProductService {
     //actualizar producto indicado por ID
     updateProductService = async (currentProduct, updatedProduct) => {
         try{
-            currentProduct.title = updatedProduct.title || currentProduct.title
-            currentProduct.description = updatedProduct.description || currentProduct.description
-            currentProduct.price = updatedProduct.price || currentProduct.price
-            currentProduct.code = updatedProduct.code || currentProduct.code
-            currentProduct.stock = updatedProduct.stock || currentProduct.stock
-            currentProduct.category = updatedProduct.category || currentProduct.category
-            currentProduct.thumbnails = updatedProduct.thumbnails || currentProduct.thumbnails
-            currentProduct.status = updatedProduct.status || currentProduct.status
+            const user = await userService.getUserByEmailService(currentProduct.owner)
+            if(user.role == "ADMIN" || (user.role == "PREMIUM" && user.email == product.owner)){
+                currentProduct.title = updatedProduct.title || currentProduct.title
+                currentProduct.description = updatedProduct.description || currentProduct.description
+                currentProduct.price = updatedProduct.price || currentProduct.price
+                currentProduct.code = updatedProduct.code || currentProduct.code
+                currentProduct.stock = updatedProduct.stock || currentProduct.stock
+                currentProduct.category = updatedProduct.category || currentProduct.category
+                currentProduct.thumbnails = updatedProduct.thumbnails || currentProduct.thumbnails
+                currentProduct.status = updatedProduct.status || currentProduct.status
+            }
             const productdto = new productDTO(currentProduct)
             await prodManager.updateProduct(currentProduct._id, productdto);
         }catch (error){
@@ -66,7 +74,11 @@ export class ProductService {
     //eliminar producto indicado por ID
     deleteProductService = async (idProduct) => {
         try{
-            await prodManager.deleteProduct(idProduct)
+            const product = await ProductService.getProductByID(idProduct)
+            const user = await userService.getUserByEmailService(product.owner)
+            if(user.role == "ADMIN" || (user.role == "PREMIUM" && user.email == product.owner)){
+                await prodManager.deleteProduct(idProduct)
+            }
         }catch(error){
             throw new Error(error.message)
         }
