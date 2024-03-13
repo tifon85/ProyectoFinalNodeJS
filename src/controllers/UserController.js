@@ -51,14 +51,16 @@ export class UserController {
         try {
             if(password1 != password2){
                 res.status(400).json({ message: "No coinciden las passwords" });
+            }else{
+                const user = await userService.getUserByEmailService(email)
+                if (!user) {
+                    //no existe el usuario
+                    return res.redirect("http://localhost:8080/api/views/register");
+                }else{
+                    await userService.restaurarPasswordService(password1, user)
+                    res.status(200).json({ message: "Password updated" });
+                }
             }
-            const user = await userService.getUserByEmailService(email)
-            if (!user) {
-                //no existe el usuario
-                return res.redirect("http://localhost:8080/api/views/register");
-            }
-            await userService.restaurarPasswordService(password1, user)
-            res.status(200).json({ message: "Password updated" });
         } catch (error) {
             res.status(500).json({ error });
         }

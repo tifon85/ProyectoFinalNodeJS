@@ -52,18 +52,16 @@ export class UserService{
     }
 
     forgotPassword = async (email) => {
-        let emailStatus='OK';
         
         try{
             const token = generateTokenMailPassword( {email} )
-            const link = verificationLink+token
 
             //Envio de mail para recuperar password
             const mailOptions = {
                 from: "nico.ten85@gmail.com",
                 to: email,
                 subject: `Recupero de contraseña`,
-                text: link,
+                text: `http://localhost:8080/api/views/restaurarPassword/`,
             };
             await transporter.sendMail(mailOptions);
             res.send("Email enviado");

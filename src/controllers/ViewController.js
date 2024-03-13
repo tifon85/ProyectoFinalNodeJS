@@ -35,7 +35,7 @@ export class ViewController {
         res.render("forgotPassword");
     }
 
-    viewRestaurar = async (req, res) => {
+    viewrestaurarPassword = async (req, res) => {
         res.render("restaurar");
     }
 
