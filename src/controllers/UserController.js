@@ -76,8 +76,9 @@ export class UserController {
     }
 
     updateRoleUser = async (req, res) => {
-        const user = req.user
+        const uid = req.params.uid
         try {
+            const user = await userService.getUserByIdService(uid)
             if(user.role != "ADMIN"){
                 await userService.updateRole(user)
             }
