@@ -36,7 +36,8 @@ export class ViewController {
     }
 
     viewrestaurarPassword = async (req, res) => {
-        res.render("restaurar");
+        const token = req.params.token
+        res.render("restaurar", { token });
     }
 
     viewError = async (req, res) => {

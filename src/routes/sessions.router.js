@@ -22,7 +22,7 @@ sessionRouter.post('/login',
                              failureRedirect: "http://localhost:8080/api/views/register",
                              session: false, })
                         , userController.loginUser)
-  
+
 // SIGNUP - LOGIN - PASSPORT GITHUB
 
 sessionRouter.get("/auth/github",
@@ -51,9 +51,9 @@ sessionRouter.get("/auth/google/callback",
 
 sessionRouter.get("/logout", userController.logoutUser);
 
-sessionRouter.post("/forgotPassword", userController.forgotPassword);
+sessionRouter.put("/forgotPassword", userController.forgotPassword);
 
-sessionRouter.post("/restaurar", userController.restaurarPassword);
+sessionRouter.put("/restaurar", userController.restaurarPassword);
 
 sessionRouter.get("/current", userController.currentSession);
 

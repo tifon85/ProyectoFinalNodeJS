@@ -49,16 +49,19 @@ export class UserService{
         }
     }
 
-    forgotPassword = async (email) => {
+    forgotPassword = async (user) => {
         
         try{
+
+            const { email } = user;
+            const token = generateTokenRestartPassword({ first_name, last_name, email, role, cartID });
 
             //Envio de mail para recuperar password
             const mailOptions = {
                 from: "nico.ten85@gmail.com",
-                to: email,
+                to: user.email,
                 subject: `Recupero de contraseña`,
-                text: `http://localhost:8080/api/views/restaurarPassword/`,
+                text: `http://localhost:8080/api/views/restaurarPassword/${token}`,
             };
             await transporter.sendMail(mailOptions);
             res.send("Email enviado");
@@ -66,7 +69,7 @@ export class UserService{
         }catch(error){
             throw new Error(error.message)
         }
-        
+
     }
 
     restaurarPasswordService = async (password, user) => {

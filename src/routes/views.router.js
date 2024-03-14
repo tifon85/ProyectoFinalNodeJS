@@ -18,10 +18,8 @@ router.get("/profile", viewController.viewProfile);
 
 router.get("/forgot-password", viewController.viewForgotPassword);
 
-router.get("/restaurarPassword",
-                passport.authenticate("jwtPassword", { failureRedirect: "http://localhost:8080/api/views/forgot-password", session: false }),
-                viewController.viewrestaurarPassword);
-  
+router.get("/restaurarPassword/:token", viewController.viewrestaurarPassword);
+
 router.get("/error", viewController.viewError);
 
 router.get('/products',

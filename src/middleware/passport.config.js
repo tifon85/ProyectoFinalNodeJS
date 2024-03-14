@@ -190,11 +190,10 @@ passport.use(
 //funcion que retorna el token --> se utiliza en JWTStrategy
 const fromCookies = (req) => {
   if(req.headers.cookie){
-    return req.headers.cookie.replace('tokenSession=', '');
+    return req.headers.cookie.replace('token=', '');
   }else{
     return null
   }
-  
 };
 
 // JWT --> para recuperar la info del usuario
@@ -204,34 +203,6 @@ passport.use(
     {
       /*jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),*/
       jwtFromRequest: ExtractJwt.fromExtractors([fromCookies]),
-      secretOrKey: secret_jwt,
-    },
-    async function (jwt_payload, done) {
-      try{
-        return done(null, jwt_payload);
-      } catch (error) {
-        return done(error)
-      }
-    }
-  )
-);
-
-const fromCookiesPassword = (req) => {
-  if(req.headers.cookie){
-    return req.headers.cookie.replace('tokenMailPassword=', '');
-  }else{
-    return null
-  }
-  
-};
-
-// JWT --> para recuperar la info del usuario
-passport.use(
-  "jwtPassword",
-  new JWTStrategy(
-    {
-      /*jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),*/
-      jwtFromRequest: ExtractJwt.fromExtractors([fromCookiesPassword]),
       secretOrKey: secret_jwt,
     },
     async function (jwt_payload, done) {

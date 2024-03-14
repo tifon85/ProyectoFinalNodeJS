@@ -33,10 +33,14 @@ export class UserController {
             const user = await userService.getUserByEmailService(email)
             if (!user) {
                 //no existe el usuario
-                return res.redirect("http://localhost:8080/api/views/register");
+                res.status(400).json({ message: "No existe usuario registrado con el email ingresado" });
             }
-            await userService.forgotPassword(email)
-            res.status(200).json({ message: "Mail para reestablecer password enviado" });
+            //jwt
+            const token = await userService.forgotPassword(user)
+            res
+            .status(200)
+            .cookie("tokenRestartPassword", token, { maxAge: 1000000, httpOnly: true });
+            res.json({ message: "Mail para reestablecer password enviado" });
         } catch (error) {
             res.status(500).json({ error });
         }
