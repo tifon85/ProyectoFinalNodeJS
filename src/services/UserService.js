@@ -1,7 +1,7 @@
 import { UserManager } from "../Dao/UserManager.js";
 import { CartManager } from "../Dao/CartManager.js";
 import { userDTO } from "../Dao/DTOs/user.dto.js";
-import { hashData, compareData, generateToken } from "../utils/utils.js";
+import { hashData, compareData, generateToken, generateTokenRestartPassword } from "../utils/utils.js";
 import { transporter } from "../utils/nodemailer.js";
 
 const userManager = new UserManager()
@@ -52,18 +52,21 @@ export class UserService{
     forgotPassword = async (user) => {
         
         try{
-
-            const { email } = user;
+            console.log("user service forgot inicio")
+            const { first_name, last_name, email, role, cartID } = user
             const token = generateTokenRestartPassword({ first_name, last_name, email, role, cartID });
-
+            console.log(token)
             //Envio de mail para recuperar password
             const mailOptions = {
                 from: "nico.ten85@gmail.com",
-                to: user.email,
+                to: email,
                 subject: `Recupero de contraseña`,
                 text: `http://localhost:8080/api/views/restaurarPassword/${token}`,
             };
+            console.log("user service forgot fin")
+            console.log(mailOptions)
             await transporter.sendMail(mailOptions);
+            console.log("Email enviado")
             res.send("Email enviado");
 
         }catch(error){
