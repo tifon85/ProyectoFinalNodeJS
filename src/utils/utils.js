@@ -21,14 +21,6 @@ export const generateToken = (user) => {
   return token;
 };
 
-//generar token - jwt restart password
-export const generateTokenRestartPassword = (values) => {
-  console.log("generar token")
-  const token = jwt.sign(values, secret_jwt, { expiresIn: "1h" });
-  console.log("token generado")
-  return token;
-};
-
 //generar token - jwt
 /*export const verifyToken = (token) => {
   return new Promise((resolve, reject) => {

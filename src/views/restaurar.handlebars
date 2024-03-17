@@ -1,5 +1,6 @@
-<form action="/api/sessions/restaurar" method="put">
+<form action="/api/sessions/restaurar" method="post">
     New Password: <input type="password" name="password1" id="password1">
     Repeat Password: <input type="password" name="password2" id="password2">
+    <input type="hidden" name="tokenReset" id="tokenReset" value={{clave}}>
     <input type="submit" value="Restaurar">
 </form>

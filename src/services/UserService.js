@@ -1,8 +1,8 @@
 import { UserManager } from "../Dao/UserManager.js";
-import { CartManager } from "../Dao/CartManager.js";
 import { userDTO } from "../Dao/DTOs/user.dto.js";
-import { hashData, compareData, generateToken, generateTokenRestartPassword } from "../utils/utils.js";
+import { hashData, compareData, generateToken } from "../utils/utils.js";
 import { transporter } from "../utils/nodemailer.js";
+import { v4 as uuidv4 } from "uuid";
 
 const userManager = new UserManager()
 
@@ -52,23 +52,22 @@ export class UserService{
     forgotPassword = async (user) => {
         
         try{
-            console.log("user service forgot inicio")
-            const { first_name, last_name, email, role, cartID } = user
-            const token = generateTokenRestartPassword({ first_name, last_name, email, role, cartID });
-            console.log(token)
+            const clave = uuidv4()
+            user.resetToken = clave
+            user.ExpireresetToken_datetime = new Date()
+            const userdto = new userDTO(user)
+            await userManager.updateUser(user._id, userdto);
             //Envio de mail para recuperar password
             const mailOptions = {
                 from: "nico.ten85@gmail.com",
-                to: email,
+                to: user.email,
                 subject: `Recupero de contraseña`,
-                text: `http://localhost:8080/api/views/restaurarPassword/${token}`,
+                text: `<div>
+                <h1>Ingresa al siguiente link para actualizar tu password</h1>
+                http://localhost:8080/api/views/restaurarPassword/${clave}
+                </div>`,
             };
-            console.log("user service forgot fin")
-            console.log(mailOptions)
             await transporter.sendMail(mailOptions);
-            console.log("Email enviado")
-            res.send("Email enviado");
-
         }catch(error){
             throw new Error(error.message)
         }
@@ -76,10 +75,14 @@ export class UserService{
     }
 
     restaurarPasswordService = async (password, user) => {
-        const hashedPassword = await hashData(password);
-        user.password = hashedPassword;
-        const userdto = new userDTO(user)
-        return await userManager.updateUser(user._id, userdto);
+        try{
+            user.password = await hashData(password);
+            const userdto = new userDTO(user)
+            return await userManager.updateUser(user._id, userdto);
+        }catch(error){
+            throw new Error(error.message)
+        }
+        
     }
 
     loginUserService = async (user) => {
@@ -97,6 +100,16 @@ export class UserService{
         }
         const userdto = new userDTO(user)
         return await userManager.updateUser(user._id, userdto);
+    }
+
+    verificarToken = async (resetToken) => {
+        let user = await userManager.getUserByToken(resetToken)
+        if(user.resetToken != resetToken || (new Date()-user.ResetPass_datetime) > 3600000 /*una hora en milisegundos*/){
+            //si el token no es correcto o pasó mas de una hora, el token NO es valido
+            return 'undefined';
+        }
+        //si no pasa lo indicado antes, entonces ES valido
+        return user;
     }
 
 }

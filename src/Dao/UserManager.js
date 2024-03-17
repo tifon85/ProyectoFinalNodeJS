@@ -37,4 +37,14 @@ export class UserManager{
         return UsersModel.updateOne({ _id: idUser }, user);
     }
 
+    //funcion para traer carrito por token
+    getUserByToken = async (resetToken) => {
+        try{
+            const user = await UsersModel.findOne({ resetToken })
+            return user
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
 }

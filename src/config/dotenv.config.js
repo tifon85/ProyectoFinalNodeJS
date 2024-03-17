@@ -14,3 +14,4 @@ export const twilio_auth_token=process.env.TWILIO_AUTH_TOKEN
 export const twilio_phone_number=process.env.TWILIO_PHONE_NUMBER
 export const nodemailer_user=process.env.NODEMAILER_USER
 export const nodemailer_password=process.env.NODEMAILER_PASSWORD
+export const jwtSecretReset=process.env.JWT_SECRET_RESET

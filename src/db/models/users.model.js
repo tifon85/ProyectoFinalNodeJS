@@ -35,6 +35,15 @@ const usersSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Carts"
   },
+  resetToken: {
+    type: String,
+    unique: true,
+    required: false,
+  },
+  ResetPass_datetime: {
+    type: Date,
+    required: false,
+  },
   
 });
 

@@ -35,12 +35,8 @@ export class UserController {
                 //no existe el usuario
                 res.status(400).json({ message: "No existe usuario registrado con el email ingresado" });
             }
-            //jwt
-            const token = await userService.forgotPassword(user)
-            res
-            .status(200)
-            .cookie("tokenRestartPassword", token, { maxAge: 1000000, httpOnly: true });
-            res.json({ message: "Mail para reestablecer password enviado" });
+            await userService.forgotPassword(user)
+            res.status(200).json({ message: "Mail para reestablecer password enviado" });
         } catch (error) {
             res.status(500).json({ error });
         }
@@ -48,21 +44,24 @@ export class UserController {
 
     //restaurar password
     restaurarPassword = async (req, res) => {
-        const { password1, password2 } = req.body;
-        const email = req.email
+        const { password1, password2, tokenReset } = req.body;
         try {
+            const user = await userService.verificarToken(tokenReset)
+            if(!user){
+                res
+                .status(400)
+                .json({ message: "Token vencido, realice el proceso de envío de mail para restablecer contraseña nuevamente" })
+                .redirect("http://localhost:8080/api/views/register");
+            }
             if(password1 != password2){
                 res.status(400).json({ message: "No coinciden las passwords" });
-            }else{
-                const user = await userService.getUserByEmailService(email)
-                if (!user) {
-                    //no existe el usuario
-                    return res.redirect("http://localhost:8080/api/views/register");
-                }else{
-                    await userService.restaurarPasswordService(password1, user)
-                    res.status(200).json({ message: "Password updated" });
-                }
             }
+            const isPasswordValid = await userService.isPasswordValidService(password1, user.password)
+            if(isPasswordValid){
+                res.status(400).json({ message: "La password no puede ser la misma que la anterior"})
+            }
+            await userService.restaurarPasswordService(password1, user)
+            res.status(200).json({ message: "Password updated" });
         } catch (error) {
             res.status(500).json({ error });
         }

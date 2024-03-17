@@ -34,7 +34,7 @@ passport.use(
                   email: email,
                   password: password,
                   role: role,
-                  cart: cartID,
+                  cart: cartID
                 }
                 const createdUser = await userService.registerUserService(user)
                 return done(null, createdUser, { message: "User created"});

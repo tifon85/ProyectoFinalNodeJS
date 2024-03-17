@@ -18,7 +18,7 @@ router.get("/profile", viewController.viewProfile);
 
 router.get("/forgot-password", viewController.viewForgotPassword);
 
-router.get("/restaurarPassword/:token", viewController.viewrestaurarPassword);
+router.get("/restaurarPassword/:clave", viewController.viewrestaurarPassword);
 
 router.get("/error", viewController.viewError);
 

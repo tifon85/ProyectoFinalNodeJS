@@ -16,7 +16,7 @@ export class ViewController {
         }
         res.render("register");
     }
-
+    
     viewLogin = async (req, res) => {
         if (req.user) {
             return res.redirect("http://localhost:8080/api/views/products");
@@ -36,8 +36,8 @@ export class ViewController {
     }
 
     viewrestaurarPassword = async (req, res) => {
-        const token = req.params.token
-        res.render("restaurar", { token });
+        const clave = req.params.clave
+        res.render("restaurar", { clave });
     }
 
     viewError = async (req, res) => {

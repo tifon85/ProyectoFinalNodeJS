@@ -8,6 +8,8 @@ export class userDTO{
         this.isGithub=user.isGithub||false,
         this.isGoogle=user.isGoogle||false,
         this.role=user.role,
-        this.cart=user.cart
+        this.cart=user.cart,
+        this.resetToken=user.resetToken,
+        this.ExpireresetToken_datetime=user.ExpireresetToken_datetime
     }
 }

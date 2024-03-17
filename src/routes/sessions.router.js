@@ -53,7 +53,7 @@ sessionRouter.get("/logout", userController.logoutUser);
 
 sessionRouter.post("/forgotPassword", userController.forgotPassword);
 
-sessionRouter.put("/restaurar", userController.restaurarPassword);
+sessionRouter.post("/restaurar", userController.restaurarPassword);
 
 sessionRouter.get("/current", userController.currentSession);
 
