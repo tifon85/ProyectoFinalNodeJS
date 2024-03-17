@@ -95,6 +95,20 @@ export class UserService{
         return token
     }
 
+    checkDocuments = async (documents) => {
+        let checkIdent;
+        let checkDom;
+        let checkEst;
+        const result = true
+        checkIdent = documents.find(element => element.name == 'Identificación')
+        checkDom = documents.find(element => element.name == 'Comprobante de domicilio')
+        checkEst = documents.find(element => element.name == 'Comprobante de estado de cuenta')
+        if(!checkIdent || !checkDom || !checkEst){
+            return false;
+        }
+        return result;
+    }
+
     updateRole = async (user) => {
         if(user.role == "USUARIO"){
             user.role = "PREMIUM"
@@ -114,5 +128,22 @@ export class UserService{
         //si no pasa lo indicado antes, entonces ES valido
         return user;
     }
+
+    saveUserDocumentsService = async ({ id, name, reference }) => {
+        const user = await userManager.getUserById(id)
+        user.documents=[
+                            {
+                            name: "name",
+                            reference: name[0].path,
+                            },
+                            {
+                            name: "reference",
+                            reference: reference[0].path,
+                            },
+                        ]
+        const userdto = new userDTO(user)
+        const savedDocuments = await userManager.updateUser(user._id, userdto);
+        return savedDocuments;
+    };
 
 }

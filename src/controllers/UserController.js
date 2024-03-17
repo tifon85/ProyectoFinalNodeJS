@@ -83,6 +83,9 @@ export class UserController {
         try {
             const user = await userService.getUserByIdService(uid)
             if(user.role != "ADMIN"){
+                if(!userService.checkDocuments(user.documents) && user.role=="USUARIO"){
+                    res.status(400).json({ message: "El usuario NO cuenta con la documentación necesaria"})
+                }
                 await userService.updateRole(user)
                 res.status(200).json({ message: "Role actualizado" });
             }
@@ -90,5 +93,13 @@ export class UserController {
             res.status(500).json({ error });
         }
     }
+
+    saveUserDocuments = async (req, res) => {
+        const { uid } = req.params.uid;
+        console.log(req.files);
+        const { name, reference } = req.files;
+        const response = await userService.saveUserDocumentsService({ uid, name, reference });
+        res.json({ response });
+    };
 
 }
