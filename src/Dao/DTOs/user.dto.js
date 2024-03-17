@@ -10,6 +10,8 @@ export class userDTO{
         this.role=user.role,
         this.cart=user.cart,
         this.resetToken=user.resetToken,
-        this.ExpireresetToken_datetime=user.ExpireresetToken_datetime
+        this.ExpireresetToken_datetime=user.ExpireresetToken_datetime,
+        this.documents=user.documents,
+        this.last_connection=user.last_connection
     }
 }

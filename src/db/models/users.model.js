@@ -37,14 +37,27 @@ const usersSchema = new mongoose.Schema({
   },
   resetToken: {
     type: String,
-    unique: true,
     required: false,
   },
-  ResetPass_datetime: {
+  ExpireresetToken_datetime: {
     type: Date,
     required: false,
   },
-  
+  documents: [
+    {
+      name:{
+        type: String,
+      },
+      reference: {
+        type: String,
+      }
+    }
+  ],
+  last_connection: {
+    type: Date,
+    required: true,
+    required: false,
+  }
 });
 
 export const UsersModel = mongoose.model('Users', usersSchema)

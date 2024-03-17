@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import { UserController } from "../controllers/UserController.js"
-import nodemailer from "nodemailer"
 
 const userController = new UserController()
 

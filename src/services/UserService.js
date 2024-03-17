@@ -89,6 +89,9 @@ export class UserService{
         const cartID = user.cart._id
         const { first_name, last_name, role, email } = user;
         const token = generateToken({ first_name, last_name, email, role, cartID });
+        user.last_connection = new Date()
+        const userdto = new userDTO(user)
+        await userManager.updateUser(user._id, userdto);
         return token
     }
 
@@ -104,7 +107,7 @@ export class UserService{
 
     verificarToken = async (resetToken) => {
         let user = await userManager.getUserByToken(resetToken)
-        if(user.resetToken != resetToken || (new Date()-user.ResetPass_datetime) > 3600000 /*una hora en milisegundos*/){
+        if(user.resetToken != resetToken || (new Date()-user.ExpireresetToken_datetime) > 3600000 /*una hora en milisegundos*/){
             //si el token no es correcto o pasó mas de una hora, el token NO es valido
             return 'undefined';
         }
