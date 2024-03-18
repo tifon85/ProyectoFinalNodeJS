@@ -95,11 +95,24 @@ export class UserController {
     }
 
     saveUserDocuments = async (req, res) => {
-        const { uid } = req.params.uid;
-        console.log(req.files);
-        const { name, reference } = req.files;
-        const response = await userService.saveUserDocumentsService({ uid, name, reference });
-        res.json({ response });
+        try{
+            const { uid } = req.params.uid;
+            console.log(req.files);
+            const { name, reference } = req.files;
+            const response = await userService.saveUserDocumentsService({ uid, name, reference });
+            res.json({ response });
+        } catch (error) {
+            res.status(500).json({ error });
+        }
     };
+
+    getUsers = async (req, res) => {
+        try{
+            const users = await userService.getUsersService()
+            return users
+        } catch (error) {
+            res.status(500).json({ error });
+        }
+    }
 
 }

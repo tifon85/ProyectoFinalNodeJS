@@ -16,4 +16,6 @@ userRouter.post("/:uid/documents",
                     ]),
                     userController.saveUserDocuments);
 
+userRouter.get("/", userController.getUsers);
+
 export default userRouter

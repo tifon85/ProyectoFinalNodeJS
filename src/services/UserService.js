@@ -146,4 +146,13 @@ export class UserService{
         return savedDocuments;
     };
 
+    getUsersService = async () => {
+        try{
+            const users = await userManager.getUsers()
+            return users;
+        }catch(error){
+            throw new Error(error.message) 
+        }
+    }
+
 }

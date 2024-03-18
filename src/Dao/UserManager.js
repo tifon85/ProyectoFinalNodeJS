@@ -47,4 +47,13 @@ export class UserManager{
         }
     }
 
+    getUsers = async () => {
+        try{
+            const users = await UsersModel.find()
+            return users
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
 }
