@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { UserController } from "../controllers/UserController.js"
-import upload from "../middlewares/multer.middleware.js";
+import upload from "../middleware/multer.middleware.js";
 
 
 const userController = new UserController()
@@ -17,5 +17,7 @@ userRouter.post("/:uid/documents",
                     userController.saveUserDocuments);
 
 userRouter.get("/", userController.getUsers);
+
+userRouter.delete("/", userController.deleteUsers);
 
 export default userRouter

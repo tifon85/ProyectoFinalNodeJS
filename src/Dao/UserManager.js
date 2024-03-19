@@ -49,8 +49,22 @@ export class UserManager{
 
     getUsers = async () => {
         try{
-            const users = await UsersModel.find()
+            const users = await UsersModel.find({}, 'first_name email role')
             return users
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
+
+    deleteUsers = async () => {
+        try{
+            // Obtener la fecha límite para la última conexión (hoy - 2 días)
+            const twoDaysAgo = new Date();
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+            // Eliminar los usuarios que no se han conectado en los últimos 2 días
+            await UsersModel.deleteMany({ last_connection: { $lt: twoDaysAgo } });
+
         }catch(error){
             throw new Error(error.message)
         }

@@ -155,4 +155,12 @@ export class UserService{
         }
     }
 
+    deleteUsersService = async () => {
+        try{
+            await userManager.deleteUsers()
+        }catch(error){
+            throw new Error(error.message) 
+        }
+    }
+
 }

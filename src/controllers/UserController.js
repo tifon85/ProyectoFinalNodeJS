@@ -109,7 +109,16 @@ export class UserController {
     getUsers = async (req, res) => {
         try{
             const users = await userService.getUsersService()
-            return users
+            res.status(200).json({ users });
+        } catch (error) {
+            res.status(500).json({ error });
+        }
+    }
+
+    deleteUsers = async (req, res) => {
+        try{
+            await userService.deleteUsersService()
+            res.status(200).json({ message: "Ya se encuentran eliminados los usuarios que no se hayan conectado en los ultimos 2 dias" });
         } catch (error) {
             res.status(500).json({ error });
         }
