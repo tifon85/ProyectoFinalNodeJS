@@ -169,8 +169,11 @@ export class UserService{
             twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
             const users = await userManager.getUsers({ last_connection: { $lt: twoDaysAgo } })
             
-            for (i = 0; i < users.length; i++) {
+            for (let i = 0; i < users.length; i++) {
                 const user = users[i]
+                console.log("aqui")
+                console.log(user)
+                console.log("alla")
                 //Envio de mail para recuperar password
                 const mailOptions = {
                     from: "nico.ten85@gmail.com",
