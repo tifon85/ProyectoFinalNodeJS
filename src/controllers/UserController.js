@@ -72,8 +72,8 @@ export class UserController {
     }
 
     logoutUser = async (req, res) => {
-        console.log(req.session.user)
-        await userService.updateLastConnection()
+        const {email} = req.user
+        await userService.updateLastConnection(email)
         res.clearCookie('token')
         res.redirect("http://localhost:8080/api/views/login");
     }

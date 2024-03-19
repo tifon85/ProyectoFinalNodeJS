@@ -48,7 +48,9 @@ sessionRouter.get("/auth/google/callback",
                       session: false, })
                     , userController.loginUser);
 
-sessionRouter.get("/logout", userController.logoutUser);
+sessionRouter.get("/logout",
+                      passport.authenticate("jwt", { session: false }),
+                      userController.logoutUser);
 
 sessionRouter.post("/forgotPassword", userController.forgotPassword);
 

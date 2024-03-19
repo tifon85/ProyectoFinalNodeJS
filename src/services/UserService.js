@@ -95,6 +95,13 @@ export class UserService{
         return token
     }
 
+    updateLastConnection = async (email) => {
+        const user = await userManager.getUserByEmail(email)
+        user.last_connection = new Date()
+        const userdto = new userDTO(user)
+        await userManager.updateUser(user._id, userdto);
+    }
+
     checkDocuments = async (documents) => {
         let checkIdent;
         let checkDom;
@@ -148,7 +155,7 @@ export class UserService{
 
     getUsersService = async () => {
         try{
-            const users = await userManager.getUsers()
+            const users = await userManager.getUsers({})
             return users;
         }catch(error){
             throw new Error(error.message) 
@@ -157,7 +164,26 @@ export class UserService{
 
     deleteUsersService = async () => {
         try{
-            await userManager.deleteUsers()
+            // Obtener la fecha límite para la última conexión (hoy - 2 días)
+            const twoDaysAgo = new Date();
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            const users = await userManager.getUsers({ last_connection: { $lt: twoDaysAgo } })
+            
+            for (i = 0; i < users.length; i++) {
+                const user = users[i]
+                //Envio de mail para recuperar password
+                const mailOptions = {
+                    from: "nico.ten85@gmail.com",
+                    to: user.email,
+                    subject: `Aviso baja de usuario`,
+                    text: `<div>
+                    <h1>Su usuario ha sido dado de baja por no haber tenido conexiones en los ultimos 2 dias.</h1>
+                    </div>`,
+                };
+                await transporter.sendMail(mailOptions);
+            } 
+
+            await userManager.deleteUsers({ last_connection: { $lt: twoDaysAgo } })
         }catch(error){
             throw new Error(error.message) 
         }
